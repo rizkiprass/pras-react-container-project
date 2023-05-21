@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import Axios from 'axios';
+import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Axios from "axios";
 
 function Home({ backendData }) {
   return (
     <>
       <h1>Welcome to the home page</h1>
-      {typeof backendData.users === 'undefined' ? (
+      {typeof backendData.users === "undefined" ? (
         <p>Loading ... </p>
       ) : (
         backendData.users.map((user, i) => <p key={i}>{user}</p>)
@@ -23,37 +23,58 @@ function CRUD() {
   const [movieName, setMovieName] = useState(""); //setMovieName adalah hasil value yang di ketik di placeholder, lalu akan di kirim ke moviename
   const [review, setReview] = useState("");
 
-  const [movieReviewList, setMovieList] = useState([])
+  const [movieReviewList, setMovieList] = useState([]);
 
-  useEffect(()=>{
-    Axios.get("http://localhost:8080/api/get").then((response)=>{
-      setMovieList(response.data)
-    })
-  })
+  useEffect(() => {
+    Axios.get("http://localhost:8080/api/get").then((response) => {
+      setMovieList(response.data);
+    });
+  });
 
   const submitReview = () => {
-    Axios.post("http://localhost:8080/api/insert", {movieName: movieName, movieReview: review}).then(()=>{
-      alert("success insert");
+    Axios.post("http://localhost:8080/api/insert", {
+      movieName: movieName,
+      movieReview: review,
     });
+
+    setMovieList([
+      ...movieReviewList,
+      { movieName: movieName, movieReview: review },
+    ]);
   };
-//*movieName*: movieName adalah nama variable dari backend "const movieName = req.body.*movieName*" movieName akan dikirim ke backend
-  
+  //*movieName*: movieName adalah nama variable dari backend "const movieName = req.body.*movieName*" movieName akan dikirim ke backend
 
   return (
     <div>
-        <h1>CRUD APP</h1>
+      <h1>CRUD APP</h1>
 
-        <div className='form'>
-            <label>Movie Name:</label>
-            <input type='text' name='movieName' onChange={(e) => {setMovieName(e.target.value)}}/>
-            <label>Review:</label>
-            <input type='text' name='review' onChange={(e) => {setReview(e.target.value)}}/>
-            <button onClick={submitReview}>Submit</button>
+      <div className="form">
+        <label>Movie Name:</label>
+        <input
+          type="text"
+          name="movieName"
+          onChange={(e) => {
+            setMovieName(e.target.value);
+          }}
+        />
+        <label>Review:</label>
+        <input
+          type="text"
+          name="review"
+          onChange={(e) => {
+            setReview(e.target.value);
+          }}
+        />
+        <button onClick={submitReview}>Submit</button>
 
-            {movieReviewList.map((val)=>{
-              return <h1>Movie Name: {val.movieName} | Movie Review: {val.movieReview}</h1>
-            })}
-        </div>
+        {movieReviewList.map((val, index) => {
+          return (
+            <h1 key={index}>
+              Movie Name: {val.movieName} | Movie Review: {val.movieReview}
+            </h1>
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -64,9 +85,9 @@ function App() {
   const [backendData, setBackendData] = useState([{}]);
 
   useEffect(() => {
-    fetch('/api')
-      .then(response => response.json())
-      .then(data => {
+    fetch("/api")
+      .then((response) => response.json())
+      .then((data) => {
         setBackendData(data);
       });
   }, []);
