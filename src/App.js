@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Axios from "axios";
-import "./App.css"; // Import the CSS file
 
 function Home({ backendData }) {
   return (
@@ -21,11 +20,10 @@ function About() {
 }
 
 function CRUD() {
-  const [movieName, setMovieName] = useState("");
+  const [movieName, setMovieName] = useState(""); //setMovieName adalah hasil value yang di ketik di placeholder, lalu akan di kirim ke moviename
   const [review, setReview] = useState("");
-  const [movieReviewList, setMovieList] = useState([]);
 
-  const [newReview, setNewReview] = useState("");
+  const [movieReviewList, setMovieList] = useState([]);
 
   useEffect(() => {
     Axios.get("http://localhost:8080/api/get").then((response) => {
@@ -44,21 +42,10 @@ function CRUD() {
       { movieName: movieName, movieReview: review },
     ]);
   };
-
-  const updateReview = (movie) => {
-    Axios.put("http://localhost:8080/api/update", {
-      movieName: movie,
-      movieReview: newReview,
-    });
-    setNewReview("");
-  };
-
-  const deleteReview = (movie) => {
-    Axios.delete(`http://localhost:8080/api/delete/${movie}`, movieName);
-  };
+  //*movieName*: movieName adalah nama variable dari backend "const movieName = req.body.*movieName*" movieName akan dikirim ke backend
 
   return (
-    <div className="crud-container">
+    <div>
       <h1>CRUD APP</h1>
 
       <div className="form">
@@ -82,32 +69,9 @@ function CRUD() {
 
         {movieReviewList.map((val, index) => {
           return (
-            <div className="card">
-              <h1>{val.movieName}</h1>
-              <p>{val.movieReview}</p>
-
-              <button
-                onClick={() => {
-                  deleteReview(val.movieName);
-                }}
-              >
-                Delete
-              </button>
-              <input
-                type="text"
-                id="updateInput"
-                onChange={(e) => {
-                  setNewReview(e.target.value);
-                }}
-              />
-              <button
-                onClick={() => {
-                  updateReview(val.movieName);
-                }}
-              >
-                Update
-              </button>
-            </div>
+            <h1 key={index}>
+              Movie Name: {val.movieName} | Movie Review: {val.movieReview}
+            </h1>
           );
         })}
       </div>
