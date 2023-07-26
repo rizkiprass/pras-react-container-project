@@ -23,40 +23,25 @@ function Home() {
   );
 }
 
-function DB() {
-  const [dbData, setDBData] = useState([]);
+function Hello() {
+  const [imageURLs, setImageURLs] = useState([]);
 
   useEffect(() => {
-    fetch("/db")
+    // Fetch image URLs from your backend server
+    fetch("/api/images")
       .then((response) => response.json())
-      .then((data) => {
-        setDBData(data.data);
-      });
+      .then((data) => setImageURLs(data.urls))
+      .catch((error) => console.error("Error fetching images:", error));
   }, []);
 
   return (
     <div>
-      <h2>DB</h2>
-      {dbData.length === 0 ? (
-        <p>Loading...</p>
-      ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Movie Name</th>
-              <th>Movie Review</th>
-            </tr>
-          </thead>
-          <tbody>
-            {dbData.map((row) => (
-              <tr key={row.id}>
-                <td>{row.movieName}</td>
-                <td>{row.movieReview}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+      <h2>Hello World</h2>
+      <div>
+        {imageURLs.map((url) => (
+          <img key={url} src={url} alt="test" />
+        ))}
+      </div>
     </div>
   );
 }
@@ -83,12 +68,15 @@ function App() {
             <li>
               <Link to="/db">DB</Link>
             </li>
+            <li>
+              <Link to="/hello">Hello</Link>
+            </li>
           </ul>
         </nav>
 
         <Routes>
-          <Route path="/db" element={<DB />} />
           <Route path="/" element={<Home />} />
+          <Route path="/hello" element={<Hello />} />
         </Routes>
       </div>
     </Router>
