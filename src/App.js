@@ -7,11 +7,17 @@ import {
   useNavigate,
 } from "react-router-dom";
 
+// Use environment variable based on the current environment
+const apiUrl =
+  process.env.NODE_ENV === "staging"
+    ? process.env.REACT_APP_API_ENDPOINT
+    : "http://localhost:8080"; // Use relative path on localhost
+
 function Home() {
   const [backendData, setBackendData] = useState({ users: [] });
 
   useEffect(() => {
-    fetch("/api")
+    fetch(`${apiUrl}/api`)
       .then((response) => response.json())
       .then((data) => {
         setBackendData(data);
@@ -34,7 +40,7 @@ function Hello() {
 
   useEffect(() => {
     // Fetch the pre-signed URL from your Node.js server
-    fetch("/api/images/popcat")
+    fetch(`${apiUrl}/api/images/popcat`)
       .then((response) => response.json())
       .then((data) => setImageUrl(data.url))
       .catch((error) => console.error("Error fetching image URL:", error));
@@ -69,7 +75,7 @@ function CreateUser() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    fetch("/user", {
+    fetch(`${apiUrl}/user`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -79,7 +85,7 @@ function CreateUser() {
       .then((response) => response.json())
       .then((data) => {
         console.log("User added successfully:", data);
-        navigate("/db"); // Redirect back to the /db route after successful creation
+        navigate(`${apiUrl}/db`); // Redirect back to the /db route after successful creation
       })
       .catch((error) => console.error("Error adding user:", error));
   };
@@ -136,7 +142,7 @@ function UpdateUser() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    fetch("/user", {
+    fetch(`${apiUrl}/user`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -146,7 +152,7 @@ function UpdateUser() {
       .then((response) => response.json())
       .then((data) => {
         console.log("User updated successfully:", data);
-        navigate("/db"); // Redirect back to the /db route after successful update
+        navigate(`${apiUrl}/db`); // Redirect back to the /db route after successful update
       })
       .catch((error) => console.error("Error updating user:", error));
   };
