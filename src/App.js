@@ -9,9 +9,11 @@ import {
 
 // Use environment variable based on the current environment
 const apiUrl =
-  process.env.NODE_ENV === "staging"
-    ? process.env.REACT_APP_API_ENDPOINT
-    : "http://localhost:8080"; // Use relative path on localhost
+  process.env.NODE_ENV === "production"
+    ? process.env.REACT_APP_API_ENDPOINT_PROD
+    : process.env.NODE_ENV === "staging"
+    ? process.env.REACT_APP_API_ENDPOINT_STAGING
+    : "http://localhost:8080";
 
 function Home() {
   const [backendData, setBackendData] = useState({ users: [] });
