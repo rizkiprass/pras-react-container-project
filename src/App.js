@@ -13,7 +13,7 @@ const apiUrl =
     ? process.env.REACT_APP_API_ENDPOINT_PROD
     : process.env.NODE_ENV === "staging"
     ? process.env.REACT_APP_API_ENDPOINT_STAGING
-    : "http://localhost:8080";
+    : "http://18.133.247.230:8080";
 
 function Home() {
   const [backendData, setBackendData] = useState({ users: [] });
